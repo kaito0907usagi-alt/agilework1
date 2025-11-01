@@ -3,8 +3,8 @@
 # define PIN_IN A0        // アナログ入力PINの設定
 # define DELAY_TIME 20    // 最少ディレイ時間(ms)の設定（10msに変えても良い）
 
-# define TOP_THRESHOLD 0  // 信号が山の部分にあるかの判定に利用する閾値
-# define DOWN_THRESHOLD 0 // 下降傾向にあるかの判定に利用する閾値
+# define TOP_THRESHOLD 450  // 信号が山の部分にあるかの判定に利用する閾値
+# define DOWN_THRESHOLD 4 // 下降傾向にあるかの判定に利用する閾値
 # define UP_THRESHOLD 1   // 上昇傾向にあったかの判定に利用する閾値
 
 uint16_t top(){
@@ -13,11 +13,23 @@ uint16_t top(){
   uint16_t value = 0;             // 読み込んだ信号の保存用    
   uint8_t up_count = 0;           // 上昇回数の保存用
   uint8_t down_count = 0;         // 下降回数の保存用
-  uint8_t timeout = 1023;         // タイムアウトまでのカウント
-  
+  uint8_t timeout = 255;         // タイムアウトまでのカウント
+  const int Baffer_size=300;    //配列の保存容量
+  uint16_t Vbox[Baffer_size];   //　電圧値の保存
+  uint32_t Tbox[Baffer_size];   //　時間の保存
+  uint8_t Pbox[Baffer_size];   //  0,1でピークか否か保存
+  int baffer_index=0;          //格納場所の指定変数
+
+
   while(timeout--){    
     value = analogRead(PIN_IN);   // アナログ入力で値を読み取る
     time = millis();              // 起動からの時間(ミリ秒)を計測
+    if(baffer_index<Baffer_size){   //保存容量を超えないようにif文で制御
+        Vbox[baffer_index]=value;
+        Tbox[baffer_index]=time;
+        Pbox[baffer_index]=0;
+        baffer_index++;                //保存場所の変更
+      }
 
     if(value >= TOP_THRESHOLD){   // 読み込んだ値が山の閾値以上である場合のみピーク検出の処理を行う
       if(value > maximum){        // 読み込んだ値が最大値より高い場合，maximum, up_count, down_countを更新する
@@ -29,15 +41,23 @@ uint16_t top(){
         down_count++;             // 最高値を更新しなかった（下降した）ため，down_countを増やす
       }
     }
-    
-    Serial.println(time/1000.0, 2); // 時間を秒に変換して小数点二桁までシリアル出力
-    Serial.println(value);          // 読み込んだ値をシリアル出力
 
     // up_countが上昇判定の閾値より高く，かつ，down_countが減少判定の閾値より高い場合，信号波形が減少に変わったと判断しピーク値を返す
-    if(up_count>UP_THRESHOLD && down_count>DOWN_THRESHOLD)      
+    if(up_count>UP_THRESHOLD && down_count>DOWN_THRESHOLD){   
+      for(int i=0;i<baffer_index;i++){
+        if(Vbox[i]==maximum){
+          Pbox[i]=1;
+        }
+    Serial.print(Tbox[i]/1000.0, 2); // 時間を秒に変換して小数点二桁までシリアル出力
+    Serial.print(",");
+    Serial.print(Vbox[i]);          // 読み込んだ値をシリアル出力
+    Serial.print(",");
+    Serial.println(Pbox[i]);
+    }   
       return maximum;
-
+  }
     delay(DELAY_TIME);
+   
   }
   return 0;  // timeout回数までにピークが見つからなかったら0を返す
 }
