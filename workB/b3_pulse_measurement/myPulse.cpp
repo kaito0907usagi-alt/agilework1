@@ -30,9 +30,10 @@ uint16_t top(){
     }
 
     // up_countが上昇判定の閾値より高く，かつ，down_countが減少判定の閾値より高い場合，信号波形が減少に変わったと判断しピーク値を返す
-    if(up_count>UP_THRESHOLD && down_count>DOWN_THRESHOLD)      
+    if(up_count>UP_THRESHOLD && down_count>DOWN_THRESHOLD) {     
       return time;
-
+    }
+    
     delay(DELAY_TIME);
   }
   return 0;  // timeout回数までにピークが見つからなかったら0を返す
