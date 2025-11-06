@@ -52,7 +52,7 @@ uint8_t rate(){
   if(peaktime>0){
       firstpeak=peaktime;
       secondpeak=top();
-      if(secondpeak>firstpeak){
+      if(secondpeak!=0){
         interval=secondpeak-firstpeak;
         bpm=60000/interval;
         return bpm;  //計算した脈拍を返す
