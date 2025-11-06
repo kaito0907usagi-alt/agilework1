@@ -42,7 +42,6 @@ uint16_t top(){
 // 脈拍を測定し返す関数
 uint8_t rate(){  
   //ピークから脈拍を測定する処理を追加すること  
-  uint32_t time=millis();
   uint16_t peaktime=top();
   uint16_t firstpeak;
   uint16_t secondpeak;
