@@ -43,23 +43,20 @@ uint16_t top(){
 uint8_t rate(){  
   //ピークから脈拍を測定する処理を追加すること  
   uint32_t time=millis();
-  uint32_t peaktime=top();
-  uint32_t lasttime;
-  uint32_t firstpeak;
-  uint32_t secondpeak;
-  uint32_t interval;
+  uint16_t peaktime=top();
+  uint16_t firstpeak;
+  uint16_t secondpeak;
+  uint16_t interval;
   uint8_t bpm;
 
   if(peaktime>0){
-    firstpeak=peaktime;
-    if(firstpeak>0){
-    secondpeak=top();
-    if(secondpeak!=0){
-      interval=secondpeak-firstpeak;
-      bpm=60000/interval;
-      return bpm;  //計算した脈拍を返す
+      firstpeak=peaktime;
+      secondpeak=top();
+      if(secondpeak>firstpeak){
+        interval=secondpeak-firstpeak;
+        bpm=60000/interval;
+        return bpm;  //計算した脈拍を返す
       }
     }
-  }
     return 0;
 }
