@@ -8,7 +8,7 @@
 # define UP_THRESHOLD 1   // 上昇傾向にあったかの判定に利用する閾値
 
 // アナログ入力で読み込んだ信号からピークを検出する関数
-uint16_t top(){
+uint32_t top(){
   uint16_t maximum = 0;           // 最大値の保存用
   uint16_t value = 0;             // 読み込んだ信号の保存用    
   uint8_t up_count = 0;           // 上昇回数の保存用
@@ -40,13 +40,13 @@ uint16_t top(){
 }
   
 // 脈拍を測定し返す関数
-uint8_t rate(){  
+uint32_t rate(){  
   //ピークから脈拍を測定する処理を追加すること  
-  uint16_t peaktime=top();
-  uint16_t firstpeak;
-  uint16_t secondpeak;
-  uint16_t interval;
-  uint8_t bpm;
+  uint32_t peaktime=top();
+  uint32_t firstpeak;
+  uint32_t secondpeak;
+  uint32_t interval;
+  uint32_t bpm;
 
   if(peaktime>0){
       firstpeak=peaktime;
