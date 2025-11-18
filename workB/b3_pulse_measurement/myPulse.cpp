@@ -40,13 +40,13 @@ uint32_t top(){
 }
   
 // 脈拍を測定し返す関数
-uint32_t rate(){  
+uint8_t rate(){  
   //ピークから脈拍を測定する処理を追加すること  
   uint32_t peaktime=top();
   uint32_t firstpeak;
   uint32_t secondpeak;
   uint32_t interval;
-  uint32_t bpm;
+  uint8_t bpm;
 
   if(peaktime>0){
       firstpeak=peaktime;
