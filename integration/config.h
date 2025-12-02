@@ -1,0 +1,3 @@
+#define SECRET_SSID "ZZAP026"
+#define SECRET_PASS ""
+#define STUDENT_ID 26
