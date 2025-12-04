@@ -62,3 +62,10 @@ void updateDisplayC1(double v){
   displayDigitC1((V/10)%10,2,5);
   displayDigitC1((V/100)%10,2,1);
 }
+
+void updateDisplay_integrate(double v){
+  int V=v;
+  displayDigitC1(V%10,2,9);
+  displayDigitC1((V/10)%10,2,5);
+  displayDigitC1((V/100)%10,2,1);
+}

@@ -5,4 +5,5 @@ void initLEDMatrix();
 void displayDigit(int d,int s_r,int s_c);
 void updateDisplay(int v);
 void updateDisplayC1(double v);
+void updateDisplay_integrate(double v);
 #endif
