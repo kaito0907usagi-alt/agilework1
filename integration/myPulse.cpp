@@ -31,7 +31,7 @@ uint32_t top(){
 
     // up_countが上昇判定の閾値より高く，かつ，down_countが減少判定の閾値より高い場合，信号波形が減少に変わったと判断しピーク値を返す
     if(up_count>UP_THRESHOLD && down_count>DOWN_THRESHOLD) {     
-      return time;
+      return millis();
     }
     
     delay(DELAY_TIME);
@@ -53,8 +53,12 @@ uint8_t rate(){
       secondpeak=top();
       if(secondpeak!=0){
         interval=secondpeak-firstpeak;
-        bpm=60000/interval;
-        return bpm;  //計算した脈拍を返す
+        if (interval > 0) {
+          bpm=60000/interval;
+          return bpm;  //計算した脈拍を返す
+        } else {
+          return 0;
+        }
       }
     }
     return 0;
