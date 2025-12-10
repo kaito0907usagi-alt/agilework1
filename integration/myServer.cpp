@@ -1,21 +1,23 @@
 #include "myServer.h"
 
-char ssid[] = SECRET_SSID; // WiFiネットワークのSSID
-char pass[] = SECRET_PASS; // WiFiネットワークのパスワード
+char ssid[] = SECRET_SSID;
+char pass[] = SECRET_PASS;
 
 WiFiServer server(80); // ポート80でサーバーを作成
 
 void initServer() {
-// IPアドレスの設定（学生IDを適切に代入）
-WiFi.config(IPAddress(192, 168, STUDENT_ID, 2));
-// アクセスポイントの開始
-        if (WiFi.beginAP(ssid, pass) != WL_AP_LISTENING) {
-            //Serial.println("Failed to start access point");
-            while (true);
-        }
-// サーバーの開始
-    server.begin();
-    //Serial.println("Server started");
+  // IPアドレスを固定 (192.168.学生番号下3桁.2)
+  WiFi.config(IPAddress(192, 168, STUDENT_ID, 2));
+
+  // アクセスポイントの開始
+  if (WiFi.beginAP(ssid, pass) != WL_AP_LISTENING) {
+    Serial.println("Failed to start access point");
+    while (true);
+  }
+
+  // サーバーの開始
+  server.begin();
+  Serial.println("Server started");
 }
 
 void handleClientRequest(double sensorValue) {

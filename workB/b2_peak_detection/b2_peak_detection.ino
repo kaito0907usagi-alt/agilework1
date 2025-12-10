@@ -7,7 +7,7 @@ void setup() {
 
 void loop() {
   uint32_t t = millis();
-  if (t < 5000) {
+  if(t<5000){
     top();  //myPulse.hのtop関数を呼び出しを繰り返す
   }
 }

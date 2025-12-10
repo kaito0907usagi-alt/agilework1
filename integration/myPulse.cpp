@@ -17,6 +17,7 @@ uint32_t top(){
   uint32_t time=millis();
   while(timeout--){    
     value = analogRead(PIN_IN);   // アナログ入力で値を読み取る
+    Serial.println(value);
 
     if(value >= TOP_THRESHOLD){   // 読み込んだ値が山の閾値以上である場合のみピーク検出の処理を行う
       if(value > maximum){        // 読み込んだ値が最大値より高い場合，maximum, up_count, down_countを更新する
