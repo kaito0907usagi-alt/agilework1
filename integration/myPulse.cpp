@@ -17,7 +17,6 @@ uint32_t top(){
   uint32_t time=millis();
   while(timeout--){    
     value = analogRead(PIN_IN);   // アナログ入力で値を読み取る
-    Serial.println(value);
 
     if(value >= TOP_THRESHOLD){   // 読み込んだ値が山の閾値以上である場合のみピーク検出の処理を行う
       if(value > maximum){        // 読み込んだ値が最大値より高い場合，maximum, up_count, down_countを更新する
@@ -41,26 +40,27 @@ uint32_t top(){
 }
   
 // 脈拍を測定し返す関数
-uint8_t rate(){  
-  //ピークから脈拍を測定する処理を追加すること  
-  uint32_t peaktime=top();
-  uint32_t firstpeak;
-  uint32_t secondpeak;
-  uint32_t interval;
-  uint8_t bpm;
+uint8_t rate(){
+  uint32_t firstpeak = top();
+  if (firstpeak == 0) return 0;
 
-  if(peaktime>0){
-      firstpeak=peaktime;
-      secondpeak=top();
-      if(secondpeak!=0){
-        interval=secondpeak-firstpeak;
-        if (interval > 0) {
-          bpm=60000/interval;
-          return bpm;  //計算した脈拍を返す
-        } else {
-          return 0;
-        }
-      }
-    }
+  uint32_t secondpeak = top();
+  if (secondpeak == 0) return 0;
+
+  uint32_t interval = 0;
+  if (secondpeak > firstpeak) {
+    interval = secondpeak - firstpeak;
+  } else {
     return 0;
+  }
+
+  if (interval == 0) return 0;
+
+  uint32_t bpm32 = 60000 / interval;
+
+  uint8_t bpm = (uint8_t)bpm32;
+  if (bpm < 40 || bpm > 200) {
+    return 0;
+  }
+  return bpm;
 }
